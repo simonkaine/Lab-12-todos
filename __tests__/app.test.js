@@ -97,7 +97,25 @@ describe('app routes', () => {
       expect(data.body.completed).toEqual(newlyCreatedTodoTask.completed);
     });
 
-    
+    test('PUT/ Updates todo task', async() => {
+
+      const newlyCreatedTodoTask = 
+        {
+          'todo': 'clean the gutters',
+          'completed': true,
+        };
+
+      const data = await fakeRequest(app)
+        .put('/api/todos/7')
+        .send(newlyCreatedTodoTask)
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      // expect(data.body.todo).toEqual(newlyCreatedTodoTask.todo);
+      expect(data.body.completed).toEqual(newlyCreatedTodoTask.completed);
+    });
+
 
   });
 });
