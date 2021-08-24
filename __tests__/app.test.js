@@ -70,11 +70,34 @@ describe('app routes', () => {
       ];
 
       const data = await fakeRequest(app)
-        .get('/todos')
+        .get('/api/todos')
+        .set('Authorization', token)
         .expect('Content-Type', /json/)
         .expect(200);
 
       expect(data.body).toEqual(expectation);
     });
+
+    test('POST/ returns newly created todo task', async() => {
+
+      const newlyCreatedTodoTask = 
+        {
+          'todo': 'clean the gutters',
+          'completed': false,
+        };
+
+      const data = await fakeRequest(app)
+        .post('/api/todos')
+        .send(newlyCreatedTodoTask)
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body.todo).toEqual(newlyCreatedTodoTask.todo);
+      expect(data.body.completed).toEqual(newlyCreatedTodoTask.completed);
+    });
+
+    
+
   });
 });
