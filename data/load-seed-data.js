@@ -2,6 +2,7 @@ const client = require('../lib/client');
 // import our seed data:
 const todos = require('./todo.js');
 const usersData = require('./users.js');
+const bcrypt = require('bcryptjs');
 const { getEmoji } = require('../lib/emoji.js');
 
 run();
@@ -13,12 +14,13 @@ async function run() {
 
     const users = await Promise.all(
       usersData.map(user => {
+        const hash = bcrypt.hashSync(user.password, 8)
         return client.query(`
                       INSERT INTO users (email, hash)
                       VALUES ($1, $2)
                       RETURNING *;
                   `,
-        [user.email, user.hash]);
+        [user.email, hash]);
       })
     );
       
